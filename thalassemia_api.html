@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thalassemia Blood Warriors API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+
+        .key-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .api-section {
+            background: white;
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #3498db;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #27ae60;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .method.post { background: #f39c12; }
+        .method.put { background: #9b59b6; }
+        .method.delete { background: #e74c3c; }
+
+        .url {
+            font-family: 'Courier New', monospace;
+            background: #34495e;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+
+        .demo-controls {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .csv-download {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+
+        .realtime-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+
+        .response-area {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .tab-container {
+            display: flex;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: #bdc3c7;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            margin-right: 2px;
+            margin-bottom: 2px;
+        }
+
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 0 10px 10px 10px;
+            border: 2px solid #3498db;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .challenge-alert {
+            background: #ffe6e6;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .integration-status {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .status-online { background: #27ae60; }
+        .status-offline { background: #e74c3c; }
+        .status-pending { background: #f39c12; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🩸 Thalassemia Blood Warriors API</h1>
+        <p class="subtitle">Real-time Patient-Donor Matching & Predictive AI System</p>
+
+        <div class="key-features">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Real-time Matching</h3>
+                <p>Live patient-donor matching with geolocation</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Predictive AI</h3>
+                <p>ML-powered donor availability prediction</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Donor Tracking</h3>
+                <p>Complete donation history & patterns</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3>System Integration</h3>
+                <p>e-RaktKosh & Blood Bridge connectivity</p>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalDonors">25,847</div>
+                <div>Active Donors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalPatients">12,543</div>
+                <div>Registered Patients</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="realTimeMatches">1,234</div>
+                <div>Real-time Matches Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="predictionAccuracy">94.2%</div>
+                <div>AI Prediction Accuracy</div>
+            </div>
+        </div>
+
+        <div class="demo-controls">
+            <h3>🚀 Live Demo & Data Export (5000 Records Each)</h3>
+            <button class="realtime-btn" onclick="simulateRealTimeMatching()">🔴 Start Real-time Matching</button>
+            <button onclick="testPredictiveAI()">🧠 Test Predictive AI</button>
+            <button onclick="trackDonorHistory()">📈 Track Donor History</button>
+            <button class="csv-download" onclick="generateAndDownloadCSV('donors', 5000)">📥 Download Donors CSV (5000)</button>
+            <button class="csv-download" onclick="generateAndDownloadCSV('patients', 5000)">📥 Download Patients CSV (5000)</button>
+            <button class="csv-download" onclick="generateAndDownloadCSV('donations', 5000)">📥 Download Donations CSV (5000)</button>
+            <button class="csv-download" onclick="generateAndDownloadCSV('hospitals', 1000)">📥 Download Hospitals CSV (1000)</button>
+        </div>
+
+        <div class="response-area" id="responseArea">API Response will appear here...</div>
+
+        <div class="tab-container">
+            <button class="tab active" onclick="showTab('realtime')">Real-time Matching</button>
+            <button class="tab" onclick="showTab('predictive')">Predictive AI</button>
+            <button class="tab" onclick="showTab('tracking')">Donor Tracking</button>
+            <button class="tab" onclick="showTab('integration')">System Integration</button>
+            <button class="tab" onclick="showTab('data-models')">Data Models</button>
+        </div>
+
+        <div id="realtime" class="tab-content active">
+            <div class="api-section">
+                <h2>⚡ Real-time Patient-Donor Matching</h2>
+                
+                <div class="challenge-alert">
+                    <strong>🚧 Challenge:</strong> Real-time logistics requires live databases, geolocation, availability tracking, and instant notifications.
+                </div>
+
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="url">/api/realtime/match</span>
+                    <p>Real-time donor matching with live availability</p>
+                    <pre>{
+  "patient_id": "P123456",
+  "urgency": "critical",
+  "blood_type": "B+",
+  "location": {
+    "latitude": 19.0760,
+    "longitude": 72.8777,
+    "city": "Mumbai",
+    "state": "Maharashtra"
+  },
+  "radius_km": 25,
+  "required_units": 2,
+  "hospital_id": "H001",
+  "contact_info": {
+    "phone": "+91-9876543210",
+    "emergency_contact": "+91-9876543211"
+  }
+}</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="url">/api/realtime/donor-status</span>
+                    <p>Live donor availability status</p>
+                    <pre>Query Parameters:
+- donor_id: Specific donor ID
+- blood_type: A+, B+, AB+, O+, A-, B-, AB-, O-
+- location: lat,lng format
+- radius: Search radius in km
+- last_updated: ISO timestamp for delta updates</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">POST</span>
+                    <span class="url">/api/realtime/notify</span>
+                    <p>Send real-time notifications to matched donors</p>
+                    <pre>{
+  "match_id": "M789012",
+  "donor_ids": ["D123456", "D789012"],
+  "message": "Urgent: Thalassemia patient needs B+ blood",
+  "urgency": "critical",
+  "response_time_minutes": 30,
+  "notification_channels": ["sms", "push", "call"]
+}</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="url">/api/realtime/queue</span>
+                    <p>Real-time matching queue status</p>
+                    <pre>Response includes:
+- pending_matches: Currently processing matches
+- avg_response_time: Average donor response time
+- success_rate: Real-time matching success rate
+- active_donors: Currently available donors by location</pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="predictive" class="tab-content">
+            <div class="api-section">
+                <h2>🧠 Predictive AI for Donor Availability</h2>
+                
+                <div class="challenge-alert">
+                    <strong>🚧 Challenge:</strong> Predictive modeling needs quality historical data, seasonal patterns, and real-time feature engineering.
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="url">/api/predict/availability</span>
+                    <p>AI-powered donor availability prediction</p>
+                    <pre>Query Parameters:
+- date: Target date (YYYY-MM-DD)
+- blood_type: Required blood type
+- location: city,state format
+- time_horizon: hours (1-168)
+- include_festivals: true/false
+- weather_factor: true/false</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">POST</span>
+                    <span class="url">/api/predict/demand-forecast</span>
+                    <p>Predict future blood demand patterns</p>
+                    <pre>{
+  "location": {
+    "city": "Mumbai",
+    "state": "Maharashtra"
+  },
+  "forecast_days": 30,
+  "blood_types": ["A+", "B+", "O+"],
+  "include_factors": {
+    "seasonal": true,
+    "festivals": true,
+    "weather": true,
+    "hospital_capacity": true
+  }
+}</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="url">/api/predict/donor-behavior</span>
+                    <p>Predict individual donor behavior patterns</p>
+                    <pre>Query Parameters:
+- donor_id: Specific donor ID
+- prediction_type: availability, next_donation, response_likelihood
+- time_frame: days (1-365)
+- include_personal_factors: true/false</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">POST</span>
+                    <span class="url">/api/predict/optimize-outreach</span>
+                    <p>AI-optimized donor outreach strategy</p>
+                    <pre>{
+  "target_blood_type": "B+",
+  "required_units": 10,
+  "target_date": "2024-12-25",
+  "location": "Mumbai",
+  "budget_constraints": {
+    "max_sms": 1000,
+    "max_calls": 100
+  }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="tracking" class="tab-content">
+            <div class="api-section">
+                <h2>📊 Donor History & Tracking</h2>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="url">/api/donors/{donor_id}/history</span>
+                    <p>Complete donor history with analytics</p>
+                    <pre>Response includes:
+- total_donations: Lifetime donation count
+- donation_timeline: Chronological donation history
+- health_metrics: Weight, hemoglobin trends
+- response_patterns: Response time analytics
+- geographical_patterns: Donation location patterns
+- seasonal_trends: Donation frequency by season</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="url">/api/donors/{donor_id}/analytics</span>
+                    <p>Advanced donor analytics and patterns</p>
+                    <pre>Query Parameters:
+- metric: donations, response_time, availability_pattern
+- time_period: 30d, 90d, 1y, lifetime
+- include_predictions: true/false
+- compare_to_average: true/false</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">POST</span>
+                    <span class="url">/api/donors/{donor_id}/track-donation</span>
+                    <p>Track new donation with full details</p>
+                    <pre>{
+  "donation_date": "2024-07-17T10:30:00Z",
+  "hospital_id": "H001",
+  "patient_id": "P123456",
+  "units_donated": 1,
+  "hemoglobin_level": 14.2,
+  "weight": 70,
+  "health_screening": {
+    "blood_pressure": "120/80",
+    "temperature": 98.6,
+    "pulse": 72
+  },
+  "follow_up_required": false
+}</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="url">/api/analytics/donor-retention</span>
+                    <p>Donor retention and churn analysis</p>
+                    <pre>Query Parameters:
+- time_period: 6m, 1y, 2y
+- blood_type: Filter by blood type
+- location: city,state format
+- segment: new, regular, veteran, at_risk</pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="integration" class="tab-content">
+            <div class="api-section">
+                <h2>🔗 System Integration</h2>
+                
+                <div class="challenge-alert">
+                    <strong>🚧 Challenge:</strong> e-RaktKosh is a government platform—access and integration face bureaucratic and technical barriers.
+                </div>
+
+                <h3>Integration Status</h3>
+                <div class="integration-status">
+                    <div class="status-indicator status-online"></div>
+                    <span>Blood Bridge Initiative - Connected</span>
+                </div>
+                <div class="integration-status">
+                    <div class="status-indicator status-pending"></div>
+                    <span>e-RaktKosh - Pending Government Approval</span>
+                </div>
+                <div class="integration-status">
+                    <div class="status-indicator status-online"></div>
+                    <span>NACO Blood Bank Directory - Connected</span>
+                </div>
+                <div class="integration-status">
+                    <div class="status-indicator status-offline"></div>
+                    <span>State Health Department APIs - Under Development</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="url">/api/integration/blood-bridge/sync</span>
+                    <p>Sync with Blood Bridge initiative data</p>
+                    <pre>Query Parameters:
+- sync_type: full, incremental, specific_state
+- state: State code for regional sync
+- last_sync: ISO timestamp for incremental sync
+- include_analytics: true/false</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">POST</span>
+                    <span class="url">/api/integration/eraktkosh/register</span>
+                    <p>Register for e-RaktKosh integration (Government approval required)</p>
+                    <pre>{
+  "organization_id": "BWI001",
+  "registration_number": "REG123456",
+  "authorized_person": {
+    "name": "Dr. Rajesh Kumar",
+    "designation": "Medical Director",
+    "contact": "+91-9876543210"
+  },
+  "integration_scope": ["donor_data", "blood_inventory", "demand_forecasting"],
+  "security_clearance": "government_approved"
+}</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="url">/api/integration/naco/blood-banks</span>
+                    <p>Get NACO registered blood banks</p>
+                    <pre>Query Parameters:
+- state: State name
+- district: District name
+- bank_type: government, private, NGO
+- services: component_separation, apheresis, rare_blood</pre>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">POST</span>
+                    <span class="url">/api/integration/cross-platform/match</span>
+                    <p>Cross-platform donor matching across all integrated systems</p>
+                    <pre>{
+  "patient_request": {
+    "blood_type": "B+",
+    "urgency": "critical",
+    "location": "Mumbai"
+  },
+  "search_platforms": ["blood_bridge", "local_db", "naco_directory"],
+  "exclude_platforms": ["eraktkosh"],
+  "max_response_time": 300
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="data-models" class="tab-content">
+            <div class="api-section">
+                <h2>📊 Data Models & Schema</h2>
+                
+                <h3>Donor Model (Enhanced)</h3>
+                <pre>{
+  "donor_id": "D123456",
+  "personal_info": {
+    "name": "Rahul Sharma",
+    "age": 28,
+    "gender": "Male",
+    "blood_type": "B+",
+    "rh_factor": "positive",
+    "phone": "+91-9876543210",
+    "email": "rahul.sharma@email.com",
+    "aadhaar": "1234-5678-9012" // Encrypted
+  },
+  "address": {
+    "street": "123 MG Road",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "pincode": "400001",
+    "latitude": 19.0760,
+    "longitude": 72.8777
+  },
+  "medical_info": {
+    "weight": 70,
+    "hemoglobin": 14.2,
+    "last_donation": "2024-05-15T10:30:00Z",
+    "total_donations": 12,
+    "eligibility_status": "eligible",
+    "next_eligible_date": "2024-08-15T00:00:00Z"
+  },
+  "availability": {
+    "currently_available": true,
+    "preferred_times": ["morning", "evening"],
+    "max_travel_distance": 25,
+    "response_time_avg": 45
+  },
+  "tracking": {
+    "registration_date": "2020-01-15T00:00:00Z",
+    "last_active": "2024-07-17T08:30:00Z",
+    "donation_streak": 5,
+    "reliability_score": 0.92
+  }
+}</pre>
+
+                <h3>Patient Model (Enhanced)</h3>
+                <pre>{
+  "patient_id": "P123456",
+  "personal_info": {
+    "name": "Priya Patel",
+    "age": 14,
+    "gender": "Female",
+    "blood_type": "B+",
+    "phone": "+91-9876543210",
+    "emergency_contact": "+91-9876543211"
+  },
+  "medical_info": {
+    "thalassemia_type": "beta_major",
+    "diagnosis_date": "2015-03-10",
+    "severity": "severe",
+    "hemoglobin_level": 7.2,
+    "iron_overload": "moderate",
+    "chelation_therapy": true
+  },
+  "transfusion_history": {
+    "total_transfusions": 156,
+    "frequency": "bi_weekly",
+    "last_transfusion": "2024-07-10T14:00:00Z",
+    "next_due": "2024-07-24T14:00:00Z",
+    "units_per_session": 2
+  },
+  "hospital_info": {
+    "primary_hospital": "H001",
+    "treating_doctor": "Dr. Meera Shah",
+    "thalassemia_center": "TC001"
+  },
+  "urgency_tracking": {
+    "current_urgency": "medium",
+    "hemoglobin_threshold": 8.0,
+    "alert_level": "monitor"
+  }
+}</pre>
+
+                <h3>Donation Record Model</h3>
+                <pre>{
+  "donation_id": "DN789012",
+  "donor_id": "D123456",
+  "patient_id": "P123456",
+  "hospital_id": "H001",
+  "donation_details": {
+    "date": "2024-07-17T10:30:00Z",
+    "blood_type": "B+",
+    "units_donated": 1,
+    "component_type": "whole_blood"
+  },
+  "medical_screening": {
+    "hemoglobin": 14.2,
+    "weight": 70,
+    "blood_pressure": "120/80",
+    "temperature": 98.6,
+    "pulse": 72,
+    "screening_passed": true
+  },
+  "logistics": {
+    "collection_time": "2024-07-17T10:30:00Z",
+    "processing_time": "2024-07-17T12:00:00Z",
+    "delivery_time": "2024-07-17T14:30:00Z",
+    "transport_mode": "ambulance"
+  },
+  "tracking": {
+    "status": "completed",
+    "blood_tested": true,
+    "transfusion_completed": true,
+    "follow_up_required": false
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Indian cities, states, and realistic names for data generation
+        const indianCities = {
+            'Maharashtra': ['Mumbai', 'Pune', 'Nagpur', 'Nashik', 'Aurangabad', 'Solapur', 'Amravati', 'Kolhapur'],
+            'Gujarat': ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Jamnagar', 'Gandhinagar'],
+            'Karnataka': ['Bangalore', 'Mysore', 'Mangalore', 'Hubli', 'Belgaum', 'Gulbarga', 'Shimoga'],
+            'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Tiruchirappalli', 'Salem', 'Tirunelveli', 'Erode'],
+            'Uttar Pradesh': ['Lucknow', 'Kanpur', 'Agra', 'Varanasi', 'Allahabad', 'Meerut', 'Bareilly'],
+            'Rajasthan': ['Jaipur', 'Jodhpur', 'Kota', 'Bikaner', 'Udaipur', 'Ajmer', 'Bharatpur'],
+            'Delhi': ['New Delhi', 'Delhi'],
+            'West Bengal': ['Kolkata', 'Howrah', 'Durgapur', 'Asansol', 'Siliguri'],
+            'Andhra Pradesh': ['Hyderabad', 'Visakhapatnam', 'Vijayawada', 'Guntur', 'Nellore', 'Kurnool'],
+            'Kerala': ['Thiruvananthapuram', 'Kochi', 'Kozhikode', 'Thrissur', 'Kollam', 'Malappuram'],
+            'Punjab': ['Chandigarh', 'Ludhiana', 'Amritsar', 'Jalandhar', 'Patiala', 'Bathinda'],
+            'Haryana': ['Gurgaon', 'Faridabad', 'Panipat', 'Ambala', 'Yamunanagar', 'Rohtak']
+        };
+
+        const indianNames = {
+            male: ['Rahul', 'Amit', 'Suresh', 'Rajesh', 'Pradeep', 'Vikram', 'Arun', 'Sanjay', 'Deepak', 'Manoj', 'Ravi', 'Ashok', 'Vinod', 'Nitin', 'Sachin', 'Ankit', 'Rohan', 'Karan', 'Arjun', 'Gaurav'],
+            female: ['Priya', 'Pooja', 'Sunita', 'Meera', 'Kavita', 'Rekha', 'Neha', 'Sneha', 'Anjali', 'Ritu', 'Shilpa', 'Madhuri', 'Swati', 'Preeti', 'Nisha', 'Sapna', 'Divya', 'Komal', 'Shruti', 'Tanvi']
+        };
+
+        const surnames = ['Sharma', 'Patel', 'Singh', 'Kumar', 'Verma', 'Gupta', 'Agarwal', 'Jain', 'Mehta', 'Shah', 'Reddy', 'N
